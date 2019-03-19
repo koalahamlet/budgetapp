@@ -44,6 +44,7 @@ class AlarmReceiver : BroadcastReceiver() {
                 .setSound(alarmSound)
                 .setWhen(System.currentTimeMillis())
                 .setContentIntent(pendingIntent)
+                .setChannelId(Constants.CHANNEL_ID)
                 .setVibrate(longArrayOf(200, 500, 500, 200, 1000)) as NotificationCompat.Builder
         notificationManager.notify(0, builder.build())
 
