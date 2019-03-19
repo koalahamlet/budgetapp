@@ -29,34 +29,42 @@ class MainActivity : AppCompatActivity() {
         val slushText = findViewById<TextView>(R.id.slushText)
 
         var slush = prefs!!.getLong(SLUSH_KEY, 0)
-        val n = NumberFormat.getCurrencyInstance(Locale.US)
-        val s = n.format(slush / 100.0)
-        slushText.text = s
+
+        setMoney(slush, slushText, editText)
 
 
         subButton.setOnClickListener {
             var slush = prefs!!.getLong(SLUSH_KEY, 0)
             var expense = getNumberFromField(editText)
             slush = slush + expense
+
             prefs!!.edit().putLong(SLUSH_KEY, slush).apply()
-            val n = NumberFormat.getCurrencyInstance(Locale.US)
-            val s = n.format(slush / 100.0)
-            slushText.setText(s)
+
+            setMoney(slush, slushText, editText)
+            val price = """
+                        ${'$'}9.99
+                        """
         }
 
         addButton.setOnClickListener {
-
             var slush = prefs!!.getLong(SLUSH_KEY, 0)
             var expense = getNumberFromField(editText)
             slush = slush - expense
+
             prefs!!.edit().putLong(SLUSH_KEY, slush).apply()
-            val n = NumberFormat.getCurrencyInstance(Locale.US)
-            val s = n.format(slush / 100.0)
-            slushText.setText(s)
+
+            setMoney(slush, slushText, editText)
         }
     }
 
+    private fun setMoney(slush: Long, slushText: TextView, editText: EditText) {
+        val n = NumberFormat.getCurrencyInstance(Locale.US)
+        val s = n.format(slush / 100.0)
+        slushText.setText(s)
+        editText.setText("")
+    }
+
     fun getNumberFromField(editText: EditText) : Long {
-        return editText.text.toString().toLong() * 100
+        return (editText.text.toString().toFloat()*100).toLong()
     }
 }
