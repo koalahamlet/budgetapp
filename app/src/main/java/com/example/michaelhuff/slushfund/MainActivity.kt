@@ -18,6 +18,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import com.example.michaelhuff.slushfund.Constants.ALARM_SET_KEY
 import com.example.michaelhuff.slushfund.Constants.CHANNEL_ID
 import com.example.michaelhuff.slushfund.Constants.SLUSH_KEY
 import java.text.NumberFormat
@@ -34,7 +35,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        registerAlarm(this)
 
         prefs = this.getSharedPreferences(PREFS_FILENAME, 0)
         val nowButton = findViewById<Button>(R.id.nowButton)
@@ -45,10 +45,14 @@ class MainActivity : AppCompatActivity() {
 
         var slush = prefs!!.getLong(SLUSH_KEY, 0)
 
+        if(!prefs!!.getBoolean(ALARM_SET_KEY, false)){
+            registerAlarm(this)
+            println("look at me: regisered alarm")
+        } else {
+            println("look at me: didn't register alarm")
+        }
+
         setMoney(slush, slushText, editText)
-
-
-
 
         nowButton.setOnClickListener {
             var i = Intent()
@@ -62,9 +66,7 @@ class MainActivity : AppCompatActivity() {
             var expense = getNumberFromField(editText)
             if (expense >0) {
                 slush = slush + expense
-
                 prefs!!.edit().putLong(SLUSH_KEY, slush).apply()
-
                 setMoney(slush, slushText, editText)
             }
         }
@@ -74,13 +76,10 @@ class MainActivity : AppCompatActivity() {
             var expense = getNumberFromField(editText)
             if (expense >0) {
                 slush = slush - expense
-
                 prefs!!.edit().putLong(SLUSH_KEY, slush).apply()
-
                 setMoney(slush, slushText, editText)
             }
         }
-
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Create the NotificationChannel
@@ -99,7 +98,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun registerAlarm(mainActivity: MainActivity) {
 
-        val filter = IntentFilter("com.example.michaelhuff.slushfund.MONEY")
+        val filter = IntentFilter()
         val receiver = AlarmReceiver()
 
         registerReceiver(receiver, filter)
@@ -118,7 +117,9 @@ class MainActivity : AppCompatActivity() {
 
         val alarmManager = mainActivity.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent)
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, 7000, pendingIntent)
+
+        prefs!!.edit().putBoolean(ALARM_SET_KEY, true).apply()
     }
 
     private fun setMoney(slush: Long, slushText: TextView, editText: EditText) {
@@ -129,6 +130,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun getNumberFromField(editText: EditText) : Long {
-        return (editText.text.toString().toFloat()*100).toLong()
+        if (editText.text.isNotBlank()) {
+            return (editText.text.toString().toFloat()*100).toLong()
+        } else {
+            return 0
+        }
     }
 }

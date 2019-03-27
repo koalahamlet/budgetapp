@@ -14,7 +14,6 @@ import com.example.michaelhuff.slushfund.Constants.SLUSH_KEY
 class AlarmReceiver : BroadcastReceiver() {
 
     val PREFS_FILENAME = "com.michaelhuff.slushfund.prefs"
-    var prefs: SharedPreferences? = null
 
     override fun onReceive(context: Context, intent: Intent) {
 
@@ -37,18 +36,16 @@ class AlarmReceiver : BroadcastReceiver() {
                 context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         val alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        val builder = NotificationCompat.Builder(context)
+        val builder = NotificationCompat.Builder(context, Constants.CHANNEL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher_round)
+//                .addAction(NotificationCompat.Action(R.mipmap.ic_launcher, "action!", ))
                 .setContentTitle("Slush Fund Increased")
                 .setContentText("Another day, another $$$")
                 .setSound(alarmSound)
                 .setWhen(System.currentTimeMillis())
                 .setContentIntent(pendingIntent)
-                .setChannelId(Constants.CHANNEL_ID)
                 .setVibrate(longArrayOf(200, 500, 500, 200, 1000)) as NotificationCompat.Builder
         notificationManager.notify(0, builder.build())
-
-
 
     }
 }
