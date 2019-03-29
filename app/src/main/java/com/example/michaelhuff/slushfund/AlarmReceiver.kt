@@ -19,11 +19,12 @@ class AlarmReceiver : BroadcastReceiver() {
 
         val prefs = context.getSharedPreferences(PREFS_FILENAME, 0)
 
-        var slush = prefs.getLong(SLUSH_KEY, 0)
-
-        slush = slush + DAILY_ALLOWANCE
-
-        prefs.edit().putLong(SLUSH_KEY, slush).apply()
+        //TODO: disabling autodeposit. I actually like getting to choose how much I put in every day... for now.
+//        var slush = prefs.getLong(SLUSH_KEY, 0)
+//
+//        slush = slush + DAILY_ALLOWANCE
+//
+//        prefs.edit().putLong(SLUSH_KEY, slush).apply()
 
         // Send Notification
         val notificationManager =

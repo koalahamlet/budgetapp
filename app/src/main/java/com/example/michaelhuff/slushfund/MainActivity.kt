@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
 
 
         prefs = this.getSharedPreferences(PREFS_FILENAME, 0)
-        val nowButton = findViewById<Button>(R.id.nowButton)
+//        val nowButton = findViewById<Button>(R.id.nowButton)
         val subButton = findViewById<FloatingActionButton>(R.id.addExpense)
         val addButton = findViewById<FloatingActionButton>(R.id.subtractExpense)
         val editText = findViewById<EditText>(R.id.editText)
@@ -54,12 +54,12 @@ class MainActivity : AppCompatActivity() {
 
         setMoney(slush, slushText, editText)
 
-        nowButton.setOnClickListener {
-            var i = Intent()
-            i.setAction("com.example.michaelhuff.slushfund.MONEY")
-            LocalBroadcastManager.getInstance(it.context).sendBroadcast(i)
-            Toast.makeText(it.context, "woweee",Toast.LENGTH_SHORT).show()
-        }
+//        nowButton.setOnClickListener {
+//            var i = Intent()
+//            i.setAction("com.example.michaelhuff.slushfund.MONEY")
+//            LocalBroadcastManager.getInstance(it.context).sendBroadcast(i)
+//            Toast.makeText(it.context, "woweee",Toast.LENGTH_SHORT).show()
+//        }
 
         subButton.setOnClickListener {
             var slush = prefs!!.getLong(SLUSH_KEY, 0)
@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity() {
         registerReceiver(receiver, filter)
 
         val calendar = Calendar.getInstance()
-        calendar.set(Calendar.HOUR_OF_DAY, 8)
+        calendar.set(Calendar.HOUR_OF_DAY, 6)
         calendar.set(Calendar.MINUTE, 0)
         calendar.set(Calendar.SECOND, 0)
         calendar.set(Calendar.MILLISECOND, 0)
@@ -117,7 +117,7 @@ class MainActivity : AppCompatActivity() {
 
         val alarmManager = mainActivity.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, 7000, pendingIntent)
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent)
 
         prefs!!.edit().putBoolean(ALARM_SET_KEY, true).apply()
     }

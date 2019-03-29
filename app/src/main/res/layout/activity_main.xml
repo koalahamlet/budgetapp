@@ -102,39 +102,47 @@
         app:layout_constraintVertical_bias="0.987"
         app:srcCompat="@android:drawable/arrow_up_float" />
 
-    <Button
-        android:id="@+id/nowButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="make Notification Now"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/subtractExpense" />
+    <!--<Button-->
+        <!--android:id="@+id/nowButton"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginStart="8dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:layout_marginEnd="8dp"-->
+        <!--android:text="make Notification Now"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/subtractExpense" />-->
 
-    <Button
-        android:id="@+id/delayButton"
-        android:layout_width="wrap_content"
-        android:layout_height="44dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="notify in 10 seconds"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nowButton"
-        app:layout_constraintVertical_bias="0.0" />
+    <!--<Button-->
+        <!--android:id="@+id/delayButton"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="44dp"-->
+        <!--android:layout_marginStart="8dp"-->
+        <!--android:layout_marginEnd="8dp"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:text="notify in 10 seconds"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintHorizontal_bias="0.501"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/nowButton"-->
+        <!--app:layout_constraintVertical_bias="0.0" />-->
 
-    <Button
-        android:id="@+id/alarmButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="start alarm."
-        tools:layout_editor_absoluteX="161dp"
-        tools:layout_editor_absoluteY="418dp" />
+    <!--<Button-->
+        <!--android:id="@+id/alarmButton"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginStart="8dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:layout_marginEnd="8dp"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:text="start alarm."-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintHorizontal_bias="0.498"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/delayButton"-->
+        <!--app:layout_constraintVertical_bias="0.0" />-->
 
 </android.support.constraint.ConstraintLayout>
