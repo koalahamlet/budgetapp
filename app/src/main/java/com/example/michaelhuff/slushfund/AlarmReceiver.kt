@@ -9,8 +9,6 @@ import android.media.RingtoneManager
 import android.support.v4.app.NotificationCompat
 import android.text.format.DateUtils
 import com.example.michaelhuff.slushfund.Constants.TIME_LAST_RUNG
-import java.time.Instant
-import java.util.*
 
 class AlarmReceiver : BroadcastReceiver() {
 
@@ -19,8 +17,6 @@ class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         println("look at me: alarm fired")
         val prefs = context.getSharedPreferences(PREFS_FILENAME, 0)
-
-
         var lastRungTime = prefs.getLong(TIME_LAST_RUNG, 0)
 
         if (!DateUtils.isToday(lastRungTime)) {
@@ -38,12 +34,11 @@ class AlarmReceiver : BroadcastReceiver() {
 
             notificationIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             val pendingIntent = PendingIntent.getActivity(
-                    context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+                    context, 0, notificationIntent, PendingIntent.FLAG_ONE_SHOT)
 
             val alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
             val builder = NotificationCompat.Builder(context, Constants.CHANNEL_ID)
                     .setSmallIcon(R.mipmap.ic_launcher_round)
-//                .addAction(NotificationCompat.Action(R.mipmap.ic_launcher, "action!", ))
                     .setContentTitle("Slush Fund Increased")
                     .setContentText("Another day, another $$$")
                     .setSound(alarmSound)
@@ -54,13 +49,6 @@ class AlarmReceiver : BroadcastReceiver() {
         } else {
             println("look at me: already rang today")
         }
-
-
-
-
-
-
-
     }
 }
 

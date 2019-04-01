@@ -6,12 +6,9 @@ import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
-import android.support.v4.content.LocalBroadcastManager
-import android.widget.Button
 
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
 import com.example.michaelhuff.slushfund.Constants.ALARM_SET_KEY
 import com.example.michaelhuff.slushfund.Constants.CHANNEL_ID
 import com.example.michaelhuff.slushfund.Constants.DAILY_ALLOWANCE
@@ -26,38 +23,21 @@ class MainActivity : AppCompatActivity() {
     var prefs: SharedPreferences? = null
     lateinit var slushText: TextView
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
-
-
         prefs = this.getSharedPreferences(PREFS_FILENAME, 0)
-//        val nowButton = findViewById<Button>(R.id.nowButton)
+        slushText = findViewById<TextView>(R.id.slushText)
         val subButton = findViewById<FloatingActionButton>(R.id.addExpense)
         val addButton = findViewById<FloatingActionButton>(R.id.subtractExpense)
         val editText = findViewById<EditText>(R.id.editText)
-        slushText = findViewById<TextView>(R.id.slushText)
-
         var slush = prefs!!.getLong(SLUSH_KEY, 0)
 
-//        if(!prefs!!.getBoolean(ALARM_SET_KEY, false)) {
         registerAlarm(this)
         println("look at me: regisered alarm")
-//        } else {
-//            println("look at me: didn't register alarm")
-//        }
 
         setMoney(slush, slushText, editText)
-
-//        nowButton.setOnClickListener {
-//            var i = Intent()
-//            i.setAction("com.example.michaelhuff.slushfund.MONEY")
-//            LocalBroadcastManager.getInstance(it.context).sendBroadcast(i)
-//            Toast.makeText(it.context, "woweee",Toast.LENGTH_SHORT).show()
-//        }
 
         subButton.setOnClickListener {
             var slush = prefs!!.getLong(SLUSH_KEY, 0)
@@ -99,7 +79,6 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         if (intent.action == "deposit.money") {
             println("look at me: do something from notification")
-
             val builder = AlertDialog.Builder(this)
             val n = NumberFormat.getCurrencyInstance(Locale.US)
             val money = n.format(DAILY_ALLOWANCE / 100.0)
@@ -107,7 +86,6 @@ class MainActivity : AppCompatActivity() {
                     .setPositiveButton(R.string.deposit,
                             DialogInterface.OnClickListener { dialog, id ->
                                 var prefs = this.getSharedPreferences(PREFS_FILENAME, 0)
-                                //TODO: disabling autodeposit. I actually like getting to choose how much I put in every day... for now.
                                 var slush = prefs.getLong(SLUSH_KEY, 0)
                                 slush += DAILY_ALLOWANCE
                                 prefs.edit().putLong(SLUSH_KEY, slush).apply()
@@ -135,15 +113,15 @@ class MainActivity : AppCompatActivity() {
 
         intent.setAction("com.example.michaelhuff.slushfund.MONEY")
 
-        val pendingIntent = PendingIntent.getBroadcast(mainActivity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent = PendingIntent.getBroadcast(mainActivity, 0, intent, PendingIntent.FLAG_ONE_SHOT)
 
         val alarmManager = mainActivity.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         alarmManager.setRepeating(
                 AlarmManager.RTC_WAKEUP,
                 calendar.timeInMillis,
-                //AlarmManager.INTERVAL_DAY,
-                1000, // debug value
+                AlarmManager.INTERVAL_DAY,
+//                1000, // debug value
                 pendingIntent)
 
         prefs!!.edit().putBoolean(ALARM_SET_KEY, true).apply()
