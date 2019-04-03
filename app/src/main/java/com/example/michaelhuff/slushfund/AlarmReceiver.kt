@@ -42,6 +42,7 @@ class AlarmReceiver : BroadcastReceiver() {
                     .setContentTitle("Slush Fund Increased")
                     .setContentText("Another day, another $$$")
                     .setSound(alarmSound)
+                    .setAutoCancel(true)
                     .setWhen(System.currentTimeMillis())
                     .setContentIntent(pendingIntent)
                     .setVibrate(longArrayOf(200, 500, 500, 200, 1000)) as NotificationCompat.Builder

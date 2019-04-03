@@ -27,11 +27,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        prefs = this.getSharedPreferences(PREFS_FILENAME, 0)
-        slushText = findViewById<TextView>(R.id.slushText)
+        slushText = findViewById(R.id.slushText)
         val subButton = findViewById<FloatingActionButton>(R.id.addExpense)
         val addButton = findViewById<FloatingActionButton>(R.id.subtractExpense)
         val editText = findViewById<EditText>(R.id.editText)
+        prefs = this.getSharedPreferences(PREFS_FILENAME, 0)
         var slush = prefs!!.getLong(SLUSH_KEY, 0)
 
         registerAlarm(this)
@@ -92,6 +92,7 @@ class MainActivity : AppCompatActivity() {
                                 val n = NumberFormat.getCurrencyInstance(Locale.US)
                                 val s = n.format(slush / 100.0)
                                 slushText.setText(s)
+                                dialog.dismiss()
                             })
             builder.create().show()
         }
