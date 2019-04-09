@@ -114,7 +114,7 @@ class MainActivity : AppCompatActivity() {
 
         intent.setAction("com.example.michaelhuff.slushfund.MONEY")
 
-        val pendingIntent = PendingIntent.getBroadcast(mainActivity, 0, intent, PendingIntent.FLAG_ONE_SHOT)
+        val pendingIntent = PendingIntent.getBroadcast(mainActivity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         val alarmManager = mainActivity.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
