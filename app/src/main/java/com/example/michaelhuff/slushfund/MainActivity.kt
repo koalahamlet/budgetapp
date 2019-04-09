@@ -1,6 +1,7 @@
 package com.example.michaelhuff.slushfund
 
 import android.app.*
+import android.arch.lifecycle.ViewModelProvider
 import android.content.*
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
@@ -13,6 +14,7 @@ import com.example.michaelhuff.slushfund.Constants.ALARM_SET_KEY
 import com.example.michaelhuff.slushfund.Constants.CHANNEL_ID
 import com.example.michaelhuff.slushfund.Constants.DAILY_ALLOWANCE
 import com.example.michaelhuff.slushfund.Constants.SLUSH_KEY
+import com.example.michaelhuff.slushfund.persistance.TransactionViewModel
 import java.text.NumberFormat
 import java.util.*
 
@@ -21,11 +23,13 @@ class MainActivity : AppCompatActivity() {
 
     val PREFS_FILENAME = "com.michaelhuff.slushfund.prefs"
     var prefs: SharedPreferences? = null
+    lateinit var transactionViewModel: TransactionViewModel
     lateinit var slushText: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        initData(application)
 
         slushText = findViewById(R.id.slushText)
         val subButton = findViewById<FloatingActionButton>(R.id.addExpense)
@@ -72,6 +76,37 @@ class MainActivity : AppCompatActivity() {
             val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(mChannel)
         }
+
+    }
+
+    private fun initData(application: Application) {
+
+
+        // Other code to setup the activity...
+
+        // Get the ViewModel.
+        model = ViewModelProviders.of(this).get(NameViewModel::class.java)
+
+
+        // Create the observer which updates the UI.
+        val nameObserver = Observer<String> { newName ->
+            // Update the UI, in this case, a TextView.
+            nameTextView.text = newName
+        }
+
+        // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
+        model.currentName.observe(this, nameObserver)
+
+
+        transactionViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(application).create(TransactionViewModel::class.java)
+
+        transactionViewModel.transactionsList.observe(this, android.arch.lifecycle.Observer {  }
+//                Observer<List<Director>>() {
+//            fun onChanged(@Nullable directors: List<Director>) {
+////                directorsListAdapter.setDirectorList(directors)
+//            }
+//        }
+        )
 
     }
 
