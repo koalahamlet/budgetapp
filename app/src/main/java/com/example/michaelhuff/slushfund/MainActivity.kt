@@ -30,32 +30,33 @@ class MainActivity : AppCompatActivity() {
         slushText = findViewById(R.id.slushText)
         val subButton = findViewById<FloatingActionButton>(R.id.addExpense)
         val addButton = findViewById<FloatingActionButton>(R.id.subtractExpense)
-        val editText = findViewById<EditText>(R.id.editText)
+        val etAmount = findViewById<EditText>(R.id.editText)
+        val etType = findViewById<EditText>(R.id.editText2)
         prefs = this.getSharedPreferences(PREFS_FILENAME, 0)
         var slush = prefs!!.getLong(SLUSH_KEY, 0)
 
         registerAlarm(this)
         println("look at me: regisered alarm")
 
-        setMoney(slush, slushText, editText)
+        setMoney(slush, slushText, etAmount)
 
         subButton.setOnClickListener {
             var slush = prefs!!.getLong(SLUSH_KEY, 0)
-            var expense = getNumberFromField(editText)
+            var expense = getNumberFromField(etAmount)
             if (expense > 0) {
                 slush = slush + expense
                 prefs!!.edit().putLong(SLUSH_KEY, slush).apply()
-                setMoney(slush, slushText, editText)
+                setMoney(slush, slushText, etAmount)
             }
         }
 
         addButton.setOnClickListener {
             var slush = prefs!!.getLong(SLUSH_KEY, 0)
-            var expense = getNumberFromField(editText)
+            var expense = getNumberFromField(etAmount)
             if (expense > 0) {
                 slush = slush - expense
                 prefs!!.edit().putLong(SLUSH_KEY, slush).apply()
-                setMoney(slush, slushText, editText)
+                setMoney(slush, slushText, etAmount)
             }
         }
 
