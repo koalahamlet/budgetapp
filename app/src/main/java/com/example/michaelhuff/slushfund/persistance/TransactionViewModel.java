@@ -7,12 +7,15 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
+// this would also be the "repository" in some guides
 public class TransactionViewModel extends AndroidViewModel {
     private TransactionDao transactionDao;
     private LiveData<List<Transaction>> transactionsLiveData;
+
     public TransactionViewModel(@NonNull Application application) {
         super(application);
-        transactionDao = TransactionDatabase.getDatabase(application).transactionDao();
+        TransactionDatabase db = TransactionDatabase.getDatabase(application);
+        transactionDao = db.transactionDao();
         transactionsLiveData = transactionDao.getTransactions();
     }
 
@@ -27,4 +30,6 @@ public class TransactionViewModel extends AndroidViewModel {
     public void delete(Transaction transaction) {
         transactionDao.deleteTransaction(transaction);
     }
+
+    public void deleteAllTransactions() {transactionDao.deleteAllTransactions();}
 }

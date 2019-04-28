@@ -21,4 +21,7 @@ public interface TransactionDao {
     @Delete
     void deleteTransaction(Transaction transaction);
 
+    @Query("DELETE FROM transactions")
+    void deleteAllTransactions();
+
 }

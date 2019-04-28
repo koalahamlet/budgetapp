@@ -7,6 +7,8 @@ import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 
 import android.widget.EditText
 import android.widget.TextView
@@ -14,6 +16,7 @@ import com.example.michaelhuff.slushfund.Constants.ALARM_SET_KEY
 import com.example.michaelhuff.slushfund.Constants.CHANNEL_ID
 import com.example.michaelhuff.slushfund.Constants.DAILY_ALLOWANCE
 import com.example.michaelhuff.slushfund.Constants.SLUSH_KEY
+import com.example.michaelhuff.slushfund.persistance.Transaction
 import com.example.michaelhuff.slushfund.persistance.TransactionViewModel
 import java.text.NumberFormat
 import java.util.*
@@ -25,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     var prefs: SharedPreferences? = null
     lateinit var transactionViewModel: TransactionViewModel
     lateinit var slushText: TextView
+    lateinit var adapter: TransactionAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,36 +81,32 @@ class MainActivity : AppCompatActivity() {
             notificationManager.createNotificationChannel(mChannel)
         }
 
+
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        adapter = TransactionAdapter()
+        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        recyclerView.adapter = adapter
     }
 
     private fun initData(application: Application) {
 
-
-        // Other code to setup the activity...
-
-        // Get the ViewModel.
-        model = ViewModelProviders.of(this).get(NameViewModel::class.java)
-
-
+        val vm = TransactionViewModel(application)
+        val dataOfTransactions = vm.transactionsList
         // Create the observer which updates the UI.
-        val nameObserver = Observer<String> { newName ->
-            // Update the UI, in this case, a TextView.
-            nameTextView.text = newName
+        val transactionListObserver = android.arch.lifecycle.Observer<List<Transaction>> { transactionList ->
+            // do thing
+            adapter.setTransactionList(transactionList)
         }
+        dataOfTransactions.observe(this, transactionListObserver)
 
-        // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
-        model.currentName.observe(this, nameObserver)
+        //vm.deleteAllTransactions()
+
+        vm.insert(Transaction(1L))
+        vm.insert(Transaction(2L))
+        vm.insert(Transaction(5L))
+        vm.insert(Transaction(-5L))
 
 
-        transactionViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(application).create(TransactionViewModel::class.java)
-
-        transactionViewModel.transactionsList.observe(this, android.arch.lifecycle.Observer {  }
-//                Observer<List<Director>>() {
-//            fun onChanged(@Nullable directors: List<Director>) {
-////                directorsListAdapter.setDirectorList(directors)
-//            }
-//        }
-        )
 
     }
 

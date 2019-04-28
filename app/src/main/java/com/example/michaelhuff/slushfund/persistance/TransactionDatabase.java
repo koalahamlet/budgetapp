@@ -17,7 +17,7 @@ public abstract class TransactionDatabase extends RoomDatabase {
     private static final String DB_NAME = "transactions.db";
     public static TransactionDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
-            synchronized (MovieDatabase.class) {
+            synchronized (TransactionDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             TransactionDatabase.class, DB_NAME)
@@ -26,8 +26,6 @@ public abstract class TransactionDatabase extends RoomDatabase {
                                 @Override
                                 public void onCreate(@NonNull SupportSQLiteDatabase db) {
                                     super.onCreate(db);
-//                                    Log.d("MovieDatabase", "populating with data...");
-//                                    new PopulateDbAsync(INSTANCE).execute();
                                 }
                             })
                             .build();

@@ -1,0 +1,48 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "e1a534aaa2df6c0700f945618dffe974",
+    "entities": [
+      {
+        "tableName": "director",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`did` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `full_name` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "did",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fullName",
+            "columnName": "full_name",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "did"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_director_full_name",
+            "unique": true,
+            "columnNames": [
+              "full_name"
+            ],
+            "createSql": "CREATE UNIQUE INDEX `index_director_full_name` ON `${TABLE_NAME}` (`full_name`)"
+          }
+        ],
+        "foreignKeys": []
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"e1a534aaa2df6c0700f945618dffe974\")"
+    ]
+  }
+}

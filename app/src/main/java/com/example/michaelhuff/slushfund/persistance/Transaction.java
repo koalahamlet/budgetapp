@@ -23,4 +23,8 @@ public class Transaction {
 
     @ColumnInfo(name = "day_of_transaction")
     public Date dayOfTransaction;
+
+    public Transaction(Long amount) {
+        this.amount = amount;
+    }
 }
