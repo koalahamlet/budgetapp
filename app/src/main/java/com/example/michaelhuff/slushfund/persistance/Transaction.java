@@ -12,19 +12,22 @@ public class Transaction {
     @ColumnInfo(name = "did")
     public int id;
 
-    @ColumnInfo(name = "was_positive")
-    public boolean wasPositive;
-
     @ColumnInfo(name = "amount")
     public Long amount;
 
     @ColumnInfo(name = "example_description")
-    public String expenseDescription;
+    public String detail;
+
+    @ColumnInfo(name = "was_positive")
+    public Boolean wasPositive;
 
     @ColumnInfo(name = "day_of_transaction")
     public Date dayOfTransaction;
 
-    public Transaction(Long amount) {
+    public Transaction(Long amount, String detail, Boolean wasPositive, Date dayOfTransaction) {
         this.amount = amount;
+        this.detail = detail;
+        this.dayOfTransaction = dayOfTransaction;
+        this.wasPositive = wasPositive;
     }
 }

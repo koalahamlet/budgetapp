@@ -2,21 +2,15 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "b86b798587bf3dc4aa01f283bd0eb103",
+    "identityHash": "4b1685a3547db3505deaa9f0b7682d00",
     "entities": [
       {
         "tableName": "transactions",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`did` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `was_positive` INTEGER NOT NULL, `amount` INTEGER, `example_description` TEXT, `day_of_transaction` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`did` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `amount` INTEGER, `example_description` TEXT, `was_positive` INTEGER, `day_of_transaction` INTEGER)",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "did",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "wasPositive",
-            "columnName": "was_positive",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -27,9 +21,15 @@
             "notNull": false
           },
           {
-            "fieldPath": "expenseDescription",
+            "fieldPath": "detail",
             "columnName": "example_description",
             "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "wasPositive",
+            "columnName": "was_positive",
+            "affinity": "INTEGER",
             "notNull": false
           },
           {
@@ -51,7 +51,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"b86b798587bf3dc4aa01f283bd0eb103\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"4b1685a3547db3505deaa9f0b7682d00\")"
     ]
   }
 }

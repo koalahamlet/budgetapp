@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.michaelhuff.slushfund.persistance.Transaction;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder> {
@@ -18,6 +19,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     private List<Transaction> data;
     private int colorPrime = 0;
     private int colorAcc = 0;
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("MMM d, yy");
 
     @NonNull
     @Override
@@ -33,10 +35,13 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     public void onBindViewHolder(@NonNull TransactionViewHolder vh, int i) {
         Transaction transaction = data.get(i);
         vh.tvAmount.setText(transaction.amount.toString());
-        vh.tvType.setText(transaction.expenseDescription);
-        int color = transaction.amount > 0 ? colorPrime : colorAcc;
+        vh.tvType.setText(transaction.detail+" "+dateFormat.format(transaction.dayOfTransaction));
+
+//        int color = transaction.amount > 0 ? colorPrime : colorAcc;
+        int color = transaction.wasPositive ? colorPrime : colorAcc;
         vh.tvAmount.setTextColor(color);
         vh.tvType.setTextColor(color);
+
     }
 
     @Override

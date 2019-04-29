@@ -1,8 +1,10 @@
 package com.example.michaelhuff.slushfund
 
 import android.app.*
+import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import android.content.*
+import android.content.res.Configuration
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -18,6 +20,7 @@ import com.example.michaelhuff.slushfund.Constants.DAILY_ALLOWANCE
 import com.example.michaelhuff.slushfund.Constants.SLUSH_KEY
 import com.example.michaelhuff.slushfund.persistance.Transaction
 import com.example.michaelhuff.slushfund.persistance.TransactionViewModel
+import kotlinx.android.synthetic.main.activity_main.*
 import java.text.NumberFormat
 import java.util.*
 
@@ -28,43 +31,50 @@ class MainActivity : AppCompatActivity() {
     var prefs: SharedPreferences? = null
     lateinit var transactionViewModel: TransactionViewModel
     lateinit var slushText: TextView
+    lateinit var etAmount: TextView
+    lateinit var etType: TextView
     lateinit var adapter: TransactionAdapter
+    lateinit var vm: ViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        transactionViewModel = TransactionViewModel(application)
         initData(application)
 
         slushText = findViewById(R.id.slushText)
         val subButton = findViewById<FloatingActionButton>(R.id.addExpense)
         val addButton = findViewById<FloatingActionButton>(R.id.subtractExpense)
-        val etAmount = findViewById<EditText>(R.id.editText)
-        val etType = findViewById<EditText>(R.id.editText2)
+        etAmount = findViewById<EditText>(R.id.editText)
+        etType = findViewById<EditText>(R.id.editText2)
         prefs = this.getSharedPreferences(PREFS_FILENAME, 0)
         var slush = prefs!!.getLong(SLUSH_KEY, 0)
 
         registerAlarm(this)
         println("look at me: regisered alarm")
 
-        setMoney(slush, slushText, etAmount)
-
-        subButton.setOnClickListener {
-            var slush = prefs!!.getLong(SLUSH_KEY, 0)
-            var expense = getNumberFromField(etAmount)
-            if (expense > 0) {
-                slush = slush + expense
-                prefs!!.edit().putLong(SLUSH_KEY, slush).apply()
-                setMoney(slush, slushText, etAmount)
-            }
-        }
+        setMoney(slush, slushText)
 
         addButton.setOnClickListener {
             var slush = prefs!!.getLong(SLUSH_KEY, 0)
-            var expense = getNumberFromField(etAmount)
+            var expense = getNumberFromField()
             if (expense > 0) {
+                transactionViewModel.insert(Transaction(expense, etType.text.toString(),false, Date()))
                 slush = slush - expense
                 prefs!!.edit().putLong(SLUSH_KEY, slush).apply()
-                setMoney(slush, slushText, etAmount)
+                setMoney(slush, slushText)
+            }
+        }
+
+        subButton.setOnClickListener {
+            var slush = prefs!!.getLong(SLUSH_KEY, 0)
+            var expense = getNumberFromField()
+            if (expense > 0) {
+                transactionViewModel.insert(Transaction(expense, etType.text.toString(),true, Date()))
+
+                slush = slush + expense
+                prefs!!.edit().putLong(SLUSH_KEY, slush).apply()
+                setMoney(slush, slushText)
             }
         }
 
@@ -84,27 +94,23 @@ class MainActivity : AppCompatActivity() {
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         adapter = TransactionAdapter()
-        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true)
         recyclerView.adapter = adapter
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration?) {
+        super.onConfigurationChanged(newConfig)
+        adapter.notifyDataSetChanged()
     }
 
     private fun initData(application: Application) {
 
-        val vm = TransactionViewModel(application)
-        val dataOfTransactions = vm.transactionsList
-        // Create the observer which updates the UI.
-        val transactionListObserver = android.arch.lifecycle.Observer<List<Transaction>> { transactionList ->
-            // do thing
-            adapter.setTransactionList(transactionList)
-        }
-        dataOfTransactions.observe(this, transactionListObserver)
 
-        //vm.deleteAllTransactions()
-
-        vm.insert(Transaction(1L))
-        vm.insert(Transaction(2L))
-        vm.insert(Transaction(5L))
-        vm.insert(Transaction(-5L))
+        transactionViewModel.deleteAllTransactions()
+//        transactionViewModel.insert(Transaction(1L, "foobar", true, Date()))
+//        transactionViewModel.insert(Transaction(2L,"fizzbazz", true, Date()))
+//        transactionViewModel.insert(Transaction(5L,"sneederflee", true, Date()))
+//        transactionViewModel.insert(Transaction(-5L,"zipzorp", false, Date()))
 
 
 
@@ -132,6 +138,17 @@ class MainActivity : AppCompatActivity() {
                             })
             builder.create().show()
         }
+
+        // start listening to data
+
+        val dataOfTransactions = transactionViewModel.transactionsList
+        // Create the observer which updates the UI.
+        val transactionListObserver = android.arch.lifecycle.Observer<List<Transaction>> { transactionList ->
+            // do thing
+            adapter.setTransactionList(transactionList)
+            adapter.notifyDataSetChanged()
+        }
+        dataOfTransactions.observe(this, transactionListObserver)
     }
     private fun registerAlarm(mainActivity: MainActivity) {
 
@@ -164,15 +181,16 @@ class MainActivity : AppCompatActivity() {
         prefs!!.edit().putBoolean(ALARM_SET_KEY, true).apply()
     }
 
-    private fun setMoney(slush: Long, slushText: TextView, editText: EditText) {
+    private fun setMoney(slush: Long, slushText: TextView) {
         val n = NumberFormat.getCurrencyInstance(Locale.US)
         val s = n.format(slush / 100.0)
         slushText.setText(s)
-        editText.setText("")
+        etAmount.setText("")
+        etType.setText("")
     }
 
-    fun getNumberFromField(editText: EditText): Long {
-        if (editText.text.isNotBlank()) {
+    fun getNumberFromField(): Long {
+        if (etAmount.text.isNotBlank()) {
             return (editText.text.toString().toFloat() * 100).toLong()
         } else {
             return 0
