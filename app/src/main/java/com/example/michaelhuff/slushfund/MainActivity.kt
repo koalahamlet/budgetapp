@@ -93,7 +93,7 @@ class MainActivity : AppCompatActivity() {
 
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
-        adapter = TransactionAdapter()
+        adapter = TransactionAdapter(transactionViewModel)
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true)
         recyclerView.adapter = adapter
     }
@@ -127,6 +127,7 @@ class MainActivity : AppCompatActivity() {
             builder.setMessage("Another $money has been deposited to your slush fund")
                     .setPositiveButton(R.string.deposit,
                             DialogInterface.OnClickListener { dialog, id ->
+                                transactionViewModel.insert(Transaction(DAILY_ALLOWANCE, "Daily Allowance", true, Date()))
                                 var prefs = this.getSharedPreferences(PREFS_FILENAME, 0)
                                 var slush = prefs.getLong(SLUSH_KEY, 0)
                                 slush += DAILY_ALLOWANCE
