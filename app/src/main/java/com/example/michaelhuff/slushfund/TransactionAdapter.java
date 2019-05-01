@@ -1,7 +1,9 @@
 package com.example.michaelhuff.slushfund;
 
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,7 +47,24 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         vh.layout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                transactionViewModel.delete(transaction);
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                builder
+                        .setTitle("Delete this expense")
+                        .setMessage("You're about to delete this expense. Are you sure?")
+                        .setPositiveButton("Yep",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        transactionViewModel.delete(transaction);
+                                        dialog.dismiss();
+                                    }
+                }).setNegativeButton("Nop", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.create().show();
                 return false;
             }
         });

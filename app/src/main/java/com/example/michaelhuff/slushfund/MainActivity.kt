@@ -34,7 +34,6 @@ class MainActivity : AppCompatActivity() {
     lateinit var etAmount: TextView
     lateinit var etType: TextView
     lateinit var adapter: TransactionAdapter
-    lateinit var vm: ViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,8 +57,13 @@ class MainActivity : AppCompatActivity() {
         addButton.setOnClickListener {
             var slush = prefs!!.getLong(SLUSH_KEY, 0)
             var expense = getNumberFromField()
+            var description = if (etType.text.toString().isBlank()) {
+                "blah"
+            } else {
+                etType.text.toString()
+            }
             if (expense > 0) {
-                transactionViewModel.insert(Transaction(expense, etType.text.toString(),false, Date()))
+                transactionViewModel.insert(Transaction(expense, description,false, Date()))
                 slush = slush - expense
                 prefs!!.edit().putLong(SLUSH_KEY, slush).apply()
                 setMoney(slush, slushText)
@@ -70,7 +74,13 @@ class MainActivity : AppCompatActivity() {
             var slush = prefs!!.getLong(SLUSH_KEY, 0)
             var expense = getNumberFromField()
             if (expense > 0) {
-                transactionViewModel.insert(Transaction(expense, etType.text.toString(),true, Date()))
+                var description = if (etType.text.toString().isBlank()) {
+                    "blah"
+                } else {
+                    etType.text.toString()
+                }
+
+                transactionViewModel.insert(Transaction(expense, description,true, Date()))
 
                 slush = slush + expense
                 prefs!!.edit().putLong(SLUSH_KEY, slush).apply()
@@ -104,16 +114,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initData(application: Application) {
-
-
 //        transactionViewModel.deleteAllTransactions()
 //        transactionViewModel.insert(Transaction(1L, "foobar", true, Date()))
 //        transactionViewModel.insert(Transaction(2L,"fizzbazz", true, Date()))
 //        transactionViewModel.insert(Transaction(5L,"sneederflee", true, Date()))
 //        transactionViewModel.insert(Transaction(-5L,"zipzorp", false, Date()))
-
-
-
     }
 
 
