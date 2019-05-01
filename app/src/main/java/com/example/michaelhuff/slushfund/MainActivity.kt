@@ -106,7 +106,7 @@ class MainActivity : AppCompatActivity() {
     private fun initData(application: Application) {
 
 
-        transactionViewModel.deleteAllTransactions()
+//        transactionViewModel.deleteAllTransactions()
 //        transactionViewModel.insert(Transaction(1L, "foobar", true, Date()))
 //        transactionViewModel.insert(Transaction(2L,"fizzbazz", true, Date()))
 //        transactionViewModel.insert(Transaction(5L,"sneederflee", true, Date()))

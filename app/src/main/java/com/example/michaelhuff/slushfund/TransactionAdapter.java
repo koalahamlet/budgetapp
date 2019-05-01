@@ -12,11 +12,12 @@ import android.widget.TextView;
 import com.example.michaelhuff.slushfund.persistance.Transaction;
 import com.example.michaelhuff.slushfund.persistance.TransactionViewModel;
 
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder> {
-
 
     private TransactionViewModel transactionViewModel; // this is smelly code. refactor to an interface.
     private List<Transaction> data;
@@ -48,8 +49,9 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
                 return false;
             }
         });
-        vh.tvAmount.setText(transaction.amount.toString());
-        vh.tvType.setText(transaction.detail+" "+dateFormat.format(transaction.dayOfTransaction));
+        String s = NumberFormat.getCurrencyInstance(Locale.US).format(transaction.amount/ 100.0);
+        vh.tvAmount.setText(s);
+        vh.tvType.setText(transaction.detail+" - "+dateFormat.format(transaction.dayOfTransaction));
 
         int color = transaction.wasPositive ? colorPrime : colorAcc;
         vh.tvAmount.setTextColor(color);
