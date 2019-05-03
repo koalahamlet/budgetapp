@@ -12,7 +12,7 @@ import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 
 @Dao
 public interface TransactionDao {
-    @Query("SELECT * FROM transactions ORDER BY day_of_transaction ASC")
+    @Query("SELECT * FROM transactions ORDER BY day_of_transaction DESC")
     LiveData<List<Transaction>> getTransactions();
 
     @Insert(onConflict = REPLACE)
